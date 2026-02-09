@@ -158,7 +158,23 @@ Die Verwendung von joy hängt vom Controller-Typ ab und ist nicht zwingend erfor
 ---
 
 ## Herausforderungen und Probleme
-Die größte Herausforderung war die Umsetzung des Zustandsreglers und die Stabilisierung der Gyroskop-Signale mit einem Kalmanfilter.  
+
+### 1. Umsetzung des Zustandsreglers
+Die größte Herausforderung lag in der Realisierung eines stabilen Zustandsreglers. Besonders problematisch waren die verrauschten Gyroskop-Daten, die die Regelung erschwerten. Zudem stellte es sich als schwierig heraus, die Positionsabweichung auf einen kleinen Radius zu reduzieren.  
+
+Ein noch bestehender Fehler ist, dass sich die Räder beim Balancieren teilweise unterschiedlich schnell drehen, wodurch das System beginnt, sich zu drehen. Vermutet wird, dass die Motoren oder deren Treiber die Stellgrößen des Reglers unterschiedlich umsetzen – entweder aufgrund unterschiedlicher Reaktanzen der Motoren oder durch Fertigungstoleranzen der Treiberbaugruppe.  
+
+### 2. Implementierung der Fernsteuerung
+Ein weiteres Problem war die Integration der Fernsteuerung. Zunächst wurde versucht, alles über den **Teensy 4.0** zu realisieren. Dies erwies sich jedoch in Kombination mit **MicroROS** als problematisch. Anschließend wurde die Hardware auf einen **ESP32** umgestellt, was grundsätzlich funktionierte.  
+
+Allerdings wurden allein für die Umsetzung des Reglers die beiden Kerne des ESP32 vollständig ausgelastet. Das Hinzufügen einer MicroROS-Task niedriger Priorität mit langsamer Wiederholrate führte dazu, dass der Regler instabil wurde. Zudem wurde die MicroROS-Task nur alle 2–3 Sekunden aufgerufen, was die Messdaten für die weitere Verarbeitung nahezu unbrauchbar machte.  
+
+Das Fazit war, zwei Mikrocontroller zu verwenden, die sich gegenseitig nicht beeinflussen. So kann der Regelzyklus stabil bleiben und die Daten können in Echtzeit übertragen werden.  
+
+### 3. Raspberry Pi als Hotspot
+Bei der Nutzung des Raspberry Pi als Hotspot traten ebenfalls kleinere Probleme auf. Für die Funkverbindung wurde eine **Alfa Network Antenne** eingesetzt. Bei Tests mit der Übertragung von ROS-Messdaten funktionierte dies zunächst nicht zuverlässig.  
+
+Teilweise konnte das Problem durch Aktivierung von **Multicast-to-Unicast** in den Einstellungen gelöst werden, was die Übertragung kleiner Datenmengen ermöglichte. Die Lidar-Daten (`/scan`) wurden jedoch oft fehlerhaft oder gar nicht übertragen. Dieses Problem tritt nur bei der Übertragung über die Antenne auf. Vermutet wird, dass die Bandbreite der Antenne zu gering ist, sodass ein Austausch notwendig sein könnte.
 
 ---
 
