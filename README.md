@@ -1,15 +1,21 @@
 # 🤖 Self-Balancing Robot – StabilOHM
 
 ## Inhaltsverzeichnis
-- [Projektbeschreibung](#projektbeschreibung)
-- [Bilder und Videos](#bilder-und-videos)
-- [Komponenten](#komponenten)
+- [Projekterweiterung](#projekterweiterung)
+- [Technische Umsetzung](#technische-umsetzung)
+- [Steuerung und Regelung](#steuerung-und-regelung)
+- [Bilder und Videos](#bilder-des-roboters)
+- [Komponenten-Erweiterung](#komponenten-erweiterung)
 - [Schaltskizze](#schaltskizze)
-- [Libraries](#libraries)
-- [Durchgeführte Arbeiten](#durchgeführte-arbeiten)
+- [Micro-ROS](#micro-ros)
+- [Raspberry Pi](#raspberry-pi)
+- [Fernsteuerung des Roboters](#fernsteuerung-des-roboters)
+- [Zusammenfassung der Erweiterungen](#zusammenfassung-der-erweiterungen)
 - [Herausforderungen und Probleme](#herausforderungen-und-probleme)
 - [Mögliche Erweiterungen](#mögliche-erweiterungen)
+- [Erste Schritte](#erste-schritte)
 - [Fazit](#fazit)
+
 
 ---
 
@@ -37,13 +43,11 @@ Die Regelung wurde auf einen **Zustandsregler** umgestellt. Ein Zustandsregler b
 
 Die Systemzustände werden wie folgt gebildet:
 
-x1_dot = x2
-x2_dot = (-gsin(x1) + p_dot_dotcos(x1))/L*(2/3)
-x3 = p
-x4 = x3_dot
-
-p_dot_dot = x4_dot = -x4/tau + K_x*i_soll/tau
-
+$x_1' = x_2$  
+$x_2' = \frac{-g \cdot \sin(x_1) + \ddot{p} \cdot \cos(x_1)}{L \cdot \frac{2}{3}}$  
+$x_3 = p$  
+$x_4 = x_3'$  
+$\ddot{p} = x_4' = -\frac{x_4}{\tau} + \frac{K_x \cdot i_{\text{soll}}}{\tau}$
 
 Mit den Koeffizienten:  
 - g = 9,81 m/s²  
@@ -64,7 +68,7 @@ Sämtliche Bilder und Videos sind in den entsprechenden Ordnern einsehbar.
 
 ---
 
-## Komponenten  
+## Komponenten-Erweiterung  
 
 ### ESP32
 Der ESP32 ist ein kosteneffizienter Microcontroller mit umfangreicher Funktionalität. Er fungiert als Kommunikationsschnittstelle zwischen **ROS** und dem Teensy 4.0.  
@@ -74,10 +78,6 @@ Der Controller wurde mit **RTOS** eingerichtet, wodurch zwei verschiedene Aufgab
 - UART-Kommunikation mit dem Teensy  
 
 Dadurch wird der Regelzyklus des Teensy nicht durch die Kommunikation blockiert und kann unabhängig arbeiten.  
-
----
-
-## Fernsteuerung
 
 ---
 
@@ -97,13 +97,21 @@ Für Micro-ROS wird grundsätzlich die Nutzung eines **RTOS** empfohlen, um Micr
 ### Micro-ROS-Agent
 Der Micro-ROS-Agent wird benötigt, um Publisher und Subscriber zu erstellen. Die Inbetriebnahme erfolgt über USB Micro-B:
 
+```bash
+# ROS2-Umgebung einrichten
 source /opt/ros/jazzy/setup.bash
+
+# In den Workspace wechseln
 cd ros2_ws
 source install/setup.bash
 
+# Micro-ROS-Agent starten
 ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0
+```
 
 Die Schnittstelle /dev/ttyACM0 muss ggf. mit lsusb überprüft werden. Im Terminal sollten Meldungen über die erstellten Publisher und Subscriber erscheinen. Über ros2 topic list kann die Funktionalität überprüft werden.
+
+---
 
 ## Raspberry Pi
 Der Raspberry Pi wurde mit **Linux Ubuntu LTS Server** eingerichtet, um die Kompatibilität mit ROS2 Jazzy sicherzustellen. Ein Workspace mit grundlegenden Knoten wurde eingerichtet:
@@ -111,7 +119,33 @@ Der Raspberry Pi wurde mit **Linux Ubuntu LTS Server** eingerichtet, um die Komp
 - **Core-Node**: zentrale Verarbeitung aller Subscriber  
 - **Lidar-Node**: sammelt Lidardaten und veröffentlicht sie über `/scan`  
 - **Control-Node**: interpretiert Fernsteuerungsdaten (z. B. Xbox-Controller)  
-- **Not-Aus-Node**: überwacht Not-Aus-Zustände (derzeit noch nicht funktionsfähig)  
+- **Not-Aus-Node**: überwacht Not-Aus-Zustände (derzeit noch nicht funktionsfähig)
+- **MicroRos-Agent**: Starten von MicroRos 
+
+---
+
+## Fernsteuerung des Roboters
+
+Zur Fernsteuerung des Roboters über einen Controller wurde das ROS2-Paket **`joy`** verwendet. Dieses muss in einem separaten Terminal gestartet werden und ist notwendig, um die **Controller-Node** auszuführen:
+```bash
+ros2 run joy joy_node
+```
+Die Verwendung von joy hängt vom Controller-Typ ab und ist nicht zwingend erforderlich. Für die in den Versuchen verwendete Xbox 360 Controller war der Start der Joy-Node jedoch notwendig.
+
+### Ablauf der Steuerung
+
+1. **Joy-Node starten**  
+   Startet die Schnittstelle zum Controller und veröffentlicht die Eingaben über das Topic `/joy`.
+
+2. **Controller-Node starten**  
+   Interpretiert die Controller-Daten und wandelt diese in Steuerbefehle für den Roboter um.
+
+3. **Core-Node starten**  
+   Zentrale Verarbeitung aller Nachrichten und Weiterleitung an die entsprechenden Sub- und Publisher.
+
+4. **Micro-ROS-Agent starten**  
+   Verbindet die Steuerbefehle vom Raspberry Pi über den Micro-ROS-Agenten mit dem Microcontroller (Teensy/ESP32).
+
 
 ---
 
