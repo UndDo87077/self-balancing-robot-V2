@@ -79,6 +79,10 @@ Der Controller wurde mit **RTOS** eingerichtet, wodurch zwei verschiedene Aufgab
 
 Dadurch wird der Regelzyklus des Teensy nicht durch die Kommunikation blockiert und kann unabhängig arbeiten.  
 
+### Traco Power DC-DC
+
+### Lidar-Sensor
+
 ---
 
 ## Schaltskizze  
