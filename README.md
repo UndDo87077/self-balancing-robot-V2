@@ -136,17 +136,26 @@ Die Verwendung von joy hängt vom Controller-Typ ab und ist nicht zwingend erfor
 
 1. **Joy-Node starten**  
    Startet die Schnittstelle zum Controller und veröffentlicht die Eingaben über das Topic `/joy`.
+   ```bash
+   ros2 run joy joy_node
+   ```
 
-2. **Controller-Node starten**  
+3. **Controller-Node starten**  
    Interpretiert die Controller-Daten und wandelt diese in Steuerbefehle für den Roboter um.
-
-3. **Core-Node starten**  
+   ```bash
+   ros2 run controller controller_node
+   ```
+5. **Core-Node starten**  
    Zentrale Verarbeitung aller Nachrichten und Weiterleitung an die entsprechenden Sub- und Publisher.
+   ```bash
+   ros2 run core core_node
+   ```
 
-4. **Micro-ROS-Agent starten**  
+7. **Micro-ROS-Agent starten**  
    Verbindet die Steuerbefehle vom Raspberry Pi über den Micro-ROS-Agenten mit dem Microcontroller (Teensy/ESP32).
-
-
+   ```bash
+   ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB1
+   ```
 ---
 
 ## Zusammenfassung der Erweiterungen
@@ -174,8 +183,7 @@ Das Fazit war, zwei Mikrocontroller zu verwenden, die sich gegenseitig nicht bee
 ### 3. Raspberry Pi als Hotspot
 Bei der Nutzung des Raspberry Pi als Hotspot traten ebenfalls kleinere Probleme auf. Für die Funkverbindung wurde eine **Alfa Network Antenne** eingesetzt. Bei Tests mit der Übertragung von ROS-Messdaten funktionierte dies zunächst nicht zuverlässig.  
 
-Teilweise konnte das Problem durch Aktivierung von **Multicast-to-Unicast** in den Einstellungen gelöst werden, was die Übertragung kleiner Datenmengen ermöglichte. Die Lidar-Daten (`/scan`) wurden jedoch oft fehlerhaft oder gar nicht übertragen. Dieses Problem tritt nur bei der Übertragung über die Antenne auf. Vermutet wird, dass die Bandbreite der Antenne zu gering ist, sodass ein Austausch notwendig sein könnte.
-
+Teilweise konnte das Problem durch Aktivierung von **Multicast-to-Unicast** in den Einstellungen gelöst werden, was die Übertragung kleiner Datenmengen ermöglichte. Die Lidar-Daten (`/scan`) wurden jedoch oft fehlerhaft oder gar nicht übertragen. Dieses Problem tritt nur bei der Übertragung über die Antenne auf. Vermutlich ist die Bandbreit der Antenne zu gering um große Datenmengen zu übertragen und muss ggf. ausgetauscht werden. 
 ---
 
 ## Mögliche Erweiterungen
