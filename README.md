@@ -82,7 +82,7 @@ Dadurch wird der Regelzyklus des Teensy nicht durch die Kommunikation blockiert 
 ---
 
 ## Schaltskizze  
-![Schaltplanerweiterung für die Steuerplatine](Images/Electrical_Circuitboard_Extension.png)
+[Schaltplanerweiterung](Images/Electrical_Circuitboard_Extension.png)
 ---
 
 ## Micro-ROS  
