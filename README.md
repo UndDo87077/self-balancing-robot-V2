@@ -184,9 +184,10 @@ Allerdings wurden allein für die Umsetzung des Reglers die beiden Kerne des ESP
 
 Das Fazit war, zwei Mikrocontroller zu verwenden, die sich gegenseitig nicht beeinflussen. So kann der Regelzyklus stabil bleiben und die Daten können in Echtzeit übertragen werden.  
 
-### 3. Raspberry Pi als Hotspot
-Bei der Nutzung des Raspberry Pi als Hotspot traten ebenfalls kleinere Probleme auf. Für die Funkverbindung wurde eine **Alfa Network Antenne** eingesetzt. Bei Tests mit der Übertragung von ROS-Messdaten funktionierte dies zunächst nicht zuverlässig.  
-Teilweise konnte das Problem durch Aktivierung von **Multicast-to-Unicast** in den Einstellungen gelöst werden, was die Übertragung kleiner Datenmengen ermöglichte. Die Lidar-Daten ('/scan') wurden jedoch oft fehlerhaft oder gar nicht übertragen. Dieses Problem tritt nur bei der Übertragung über die Antenne auf. Vermutlich ist die Bandbreitte der Antenne zu gering um große Datenmengen zu übertragen und muss ggf. ausgetauscht werden.
+### 3. Raspberry Pi
+## Hotspot
+Bei der Nutzung des Raspberry Pi als Hotspot traten ebenfalls kleinere Probleme auf. Für die Funkverbindung wurde eine Alfa Network Antenne eingesetzt. Bei Tests mit der Übertragung von ROS-Messdaten funktionierte dies zunächst nicht zuverlässig. Teilweise konnte das Problem durch Aktivierung von Multicast-to-Unicast in den Einstellungen gelöst werden, was die Übertragung kleiner Datenmengen ermöglichte. Die Lidar-Daten wurden jedoch oft fehlerhaft oder gar nicht übertragen. Dieses Problem tritt nur bei der Übertragung über die Antenne auf. Vermutlich ist die Bandbreite zu gering um große und muss ggf. ausgetauscht werden.
+
 ---
 
 ## Mögliche Erweiterungen
