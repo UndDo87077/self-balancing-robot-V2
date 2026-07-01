@@ -80,8 +80,7 @@ Der Controller wurde mit **RTOS** eingerichtet, wodurch zwei verschiedene Aufgab
 Dadurch wird der Regelzyklus des Teensy nicht durch die Kommunikation blockiert und kann unabhängig arbeiten.  
 
 ### Traco Power DC-DC
-
-### Lidar-Sensor
+Ein Traco Power DC/DC-Wandler wandelt eine Eingangsspannung von 24 V DC in eine stabile Ausgangsspannung von 5 V DC um. Er wird zur zuverlässigen Versorgung von elektronischen Geräten wie Mikrocontrollern, Sensoren oder Steuerungen eingesetzt. Durch seinen hohen Wirkungsgrad arbeitet er energieeffizient und entwickelt nur wenig Wärme.
 
 ---
 
