@@ -1,4 +1,4 @@
-# 🤖 Self-Balancing Robot – StabilOHM
+# Self-Balancing Robot – StabilOHM
 
 ## Inhaltsverzeichnis
 - [Projekterweiterung](#projekterweiterung)
@@ -10,6 +10,7 @@
 - [Micro-ROS](#micro-ros)
 - [Raspberry Pi](#raspberry-pi)
 - [Fernsteuerung des Roboters](#fernsteuerung-des-roboters)
+- [Wireless-Notaus](#not-aus-system)
 - [Zusammenfassung der Erweiterungen](#zusammenfassung-der-erweiterungen)
 - [Herausforderungen und Probleme](#herausforderungen-und-probleme)
 - [Mögliche Erweiterungen](#mögliche-erweiterungen)
@@ -159,13 +160,32 @@ Die Verwendung von joy hängt vom Controller-Typ ab und ist nicht zwingend erfor
    ```bash
    ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB1
    ```
----
 
-## Zusammenfassung der Erweiterungen
-- **Elektrischer Umbau**: galvanisch getrennter Steuerkreis, TRACO-POWER-Spannungsregler, Integration von Raspberry Pi, ESP32 und Teensy auf zentraler Platine, Spannungs-/Strom- und Leistungsanzeige  
-- **Raspberry Pi**: Ubuntu Server, ROS2 Jazzy, konfigurierter Workspace, Hotspot-Funktionalität  
-- **Regelungsänderung**: Umstellung auf Zustandsregler auf dem Teensy  
-- **Softwareänderung**: Implementierung von UART- und Micro-ROS-Schnittstellen  
+
+## Not-Aus-System
+
+Der Zustand des Not-Aus wird über einen ESP32 per UDP an den Raspberry Pi übertragen. Ein ROS2-Node empfängt die UDP-Daten und veröffentlicht den Zustand als `std_msgs/msg/Bool`.
+
+### Ablauf des Not-Aus
+
+1. **UDP-Receiver-Node starten**  
+   Empfängt den Zustand des ESP32 über UDP-Port `5005` und veröffentlicht diesen auf dem Topic `/esp/bit`.
+
+   ```bash
+   ros2 run bit_receiver_node bit_receiver_node
+   ```
+
+2. **Not-Aus-Zustand prüfen**  
+   Der aktuelle Zustand des Not-Aus kann über das Topic `/esp/bit` überprüft werden.
+
+   ```bash
+   ros2 topic echo /esp/bit
+   ```
+
+3. **Integration in den Fahrbetrieb**  
+   Der Node für den Fahrbetrieb muss das Topic `/esp/bit` vom Typ `std_msgs/msg/Bool` subscriben. Abhängig vom empfangenen Zustand werden Fahrbefehle freigegeben oder gesperrt.
+
+
 
 ---
 
