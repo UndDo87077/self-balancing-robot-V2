@@ -159,7 +159,7 @@ Die Verwendung von joy hängt vom Controller-Typ ab und ist nicht zwingend erfor
 7. **Micro-ROS-Agent starten**  
    Verbindet die Steuerbefehle vom Raspberry Pi über den Micro-ROS-Agenten mit dem Microcontroller (Teensy/ESP32).
    ```bash
-   ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB1
+   ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0
    ```
 
 
