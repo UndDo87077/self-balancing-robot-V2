@@ -225,6 +225,13 @@ Bei der Nutzung des Raspberry Pi als Hotspot traten ebenfalls kleinere Probleme 
 ---
 
 ## Erste Schritte
+Der Roboter befindet sich aktuell in einem funktionsfähigen Zustand. Für eine weitere Bearbeitung sollte daher zunächst die bestehende Softwarearchitektur und insbesondere die Aufteilung zwischen Teensy, ESP32 und Raspberry Pi nachvollzogen werden.
+
+Ein sinnvoller erster Ansatz ist die Untersuchung, ob zukünftig auf den Teensy 4.0 verzichtet werden kann. Aktuell übernimmt dieser die Regelung des Roboters, während der ESP32 als Kommunikationsschnittstelle zu ROS2 dient. Diese Trennung erschwert jedoch die direkte Integration der Regelungs- und Sensordaten in ROS2.
+
+Daher sollte geprüft werden, ob die Regelung auf eine besser in ROS2 integrierbare Hardware oder direkt auf den Raspberry Pi übertragen werden kann. Ziel wäre es, Sensorwerte, Fahrbefehle und Zustände des Roboters direkt über ROS2-Topics verfügbar zu machen und die bestehende Kommunikationsstruktur zu vereinfachen.
+
+Als Grundlage sollten zunächst der bestehende Zustandsregler auf dem Teensy sowie die vorhandenen ROS2-Nodes und Topics nachvollzogen werden. Anschließend kann schrittweise eine alternative Systemarchitektur aufgebaut und getestet werden.
 
 ---
 
