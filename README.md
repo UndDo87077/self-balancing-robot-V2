@@ -65,8 +65,8 @@ Zusätzlich wurde ein **Kalmanfilter** implementiert, um das Gyroskop-Signal zu 
 ### Bild des aktuellen Roboters
 <img src="Images/Final_Robot_1.PNG" alt="Schaltplanerweiterung" width="50%">
 
-## Bilder und Videos
-Sämtliche Bilder und Videos sind in den entsprechenden Ordnern einsehbar.  
+### Video des Roboters
+🎥 [Balancieren des Roboters](Images/Robot_balance.mov) 
 
 ---
 
